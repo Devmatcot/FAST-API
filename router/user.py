@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from auth.oauth2 import get_current_user
 from db import db_user
 from db.database import get_db
 
@@ -17,24 +18,24 @@ def createAccount(request:UserBase, db:Session = Depends(get_db),):
 #update! 
 
 #read all user
-@router.get('/alluser', response_model= list[UserDisplay])
-def getAllUser(db:Session= Depends(get_db),):
+@router.get('/alluser', response_model= list[UserDisplay], )
+def getAllUser(db:Session= Depends(get_db),currentuser:str=Depends(get_current_user)):
     return db_user.get_all_user(db= db)
 
 #read single user from db
 @router.get('/{id}', response_model= UserDisplay)
-def getUser(id:int,db:Session = Depends(get_db),):
+def getUser(id:int,db:Session = Depends(get_db),currentuser:str=Depends(get_current_user)):
     return db_user.get_user(db=db, id=id)
     
 #update user endpoint
 @router.post('/update/{id}')
-def updateUser(id:int,request:UserBase,db:Session=Depends(get_db)):
+def updateUser(id:int,request:UserBase,db:Session=Depends(get_db), currentuser:str=Depends(get_current_user)):
     return db_user.update_user(id=id,request=request, db=db)
     
 
 #delete user
 @router.delete('/delete/{id}')
-def deleteUser(id:int,db:Session=Depends(get_db)):
+def deleteUser(id:int,db:Session=Depends(get_db), currentuser:str=Depends(get_current_user)):
     return db_user.delete_user(db=db, id=id)
 
     
