@@ -1,8 +1,9 @@
 fastapi
 uvicorn
 sqlalchemy
+python-multipart
 passlib
 bcrypt
 python-jose
-python-multipart
 aiofiles
+websockets
